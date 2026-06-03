@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>小汽水盲盒核心链路拆解</title>
+<style>
+:root{color-scheme:light;--bg:#f4fbf2;--text:#142318;--muted:#66746a;--line:#d7e8d5;--card:#fff;--green:#64d83f;}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:linear-gradient(180deg,#f7fff4,#eef9ff 50%,#fff8d7);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--text)}
+.wrap{width:min(100%,1500px);margin:0 auto;padding:30px 20px 56px}
+.hero{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:22px}
+h1{margin:0 0 8px;font-size:30px;line-height:1.15}
+.hero p{margin:0;color:var(--muted);font-size:14px;line-height:1.7}
+.spec{flex:0 0 auto;padding:12px 16px;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.78);font-weight:900;color:#245226}
+.nav{position:sticky;top:0;z-index:5;display:flex;gap:8px;overflow:auto;padding:10px 0 16px;background:linear-gradient(180deg,rgba(247,255,244,.96),rgba(247,255,244,.72))}
+.nav a{flex:0 0 auto;padding:8px 10px;border:1px solid var(--line);border-radius:999px;background:#fff;color:#27582a;text-decoration:none;font-size:13px;font-weight:800}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:22px;align-items:start}
+.frame{padding:14px;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.9);box-shadow:0 12px 26px rgba(77,137,72,.12)}
+.meta{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px}
+.step{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--green);font-weight:1000;color:#0d2a0c;flex:0 0 auto}
+h2{margin:0;font-size:18px;line-height:1.25}
+.meta p{margin:5px 0 0;color:var(--muted);font-size:13px;line-height:1.55}
+.frame img{display:block;width:min(100%,430px);height:auto;margin:0 auto;border-radius:8px;background:#d9f4ff;box-shadow:0 10px 24px rgba(25,63,36,.16)}
+@media (max-width:720px){.hero{display:block}.spec{display:inline-block;margin-top:12px}.wrap{padding-inline:12px}.grid{grid-template-columns:1fr}.frame{padding:10px}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="hero">
+    <div>
+      <h1>小汽水盲盒核心链路拆解</h1>
+      <p>按 iPhone 16 Pro Max 竖屏尺寸生成，每张图片为 1320 × 2868 px。</p>
+    </div>
+    <div class="spec">13 张屏幕图</div>
+  </div>
+  <nav class="nav"><a href="#01-home">01 主页</a><a href="#02-overview">02 盲盒概览弹窗</a><a href="#03-detail">03 盲盒详情弹窗</a><a href="#04-single-result">04 单抽结果</a><a href="#05-five-result">05 五次连抽结果</a><a href="#06-cabinet">06 盲盒盒柜</a><a href="#07-shipping-select">07 邮寄选择</a><a href="#08-order">08 确认订单</a><a href="#09-address">09 新增地址</a><a href="#10-pay-success">10 支付成功</a><a href="#11-purchase-records">11 购买记录</a><a href="#12-shipping-records">12 邮寄记录</a><a href="#13-order-detail">13 订单详情</a></nav>
+  <div class="grid">
+        <section class="frame" id="01-home">
+          <div class="meta">
+            <span class="step">01</span>
+            <div>
+              <h2>主页</h2>
+              <p>进入活动，查看主图、盲盒列表、概览和底部抽取入口。</p>
+            </div>
+          </div>
+          <img src="screens/01-home.png" width="1320" height="2868" alt="01 主页">
+        </section>
+
+        <section class="frame" id="02-overview">
+          <div class="meta">
+            <span class="step">02</span>
+            <div>
+              <h2>盲盒概览弹窗</h2>
+              <p>查看总款数、常规款、隐藏款和概率信息。</p>
+            </div>
+          </div>
+          <img src="screens/02-overview.png" width="1320" height="2868" alt="02 盲盒概览弹窗">
+        </section>
+
+        <section class="frame" id="03-detail">
+          <div class="meta">
+            <span class="step">03</span>
+            <div>
+              <h2>盲盒详情弹窗</h2>
+              <p>点击盲盒卡片后查看款式详情，可进入单抽或五次连抽。</p>
+            </div>
+          </div>
+          <img src="screens/03-detail.png" width="1320" height="2868" alt="03 盲盒详情弹窗">
+        </section>
+
+        <section class="frame" id="04-single-result">
+          <div class="meta">
+            <span class="step">04</span>
+            <div>
+              <h2>单抽结果</h2>
+              <p>单次抽取后展示获得款式，并提供继续单抽或五次连抽。</p>
+            </div>
+          </div>
+          <img src="screens/04-single-result.png" width="1320" height="2868" alt="04 单抽结果">
+        </section>
+
+        <section class="frame" id="05-five-result">
+          <div class="meta">
+            <span class="step">05</span>
+            <div>
+              <h2>五次连抽结果</h2>
+              <p>五次连抽后展示 5 张结果卡片，允许重复款。</p>
+            </div>
+          </div>
+          <img src="screens/05-five-result.png" width="1320" height="2868" alt="05 五次连抽结果">
+        </section>
+
+        <section class="frame" id="06-cabinet">
+          <div class="meta">
+            <span class="step">06</span>
+            <div>
+              <h2>盲盒盒柜</h2>
+              <p>查看已解锁款式和当前拥有数量。</p>
+            </div>
+          </div>
+          <img src="screens/06-cabinet.png" width="1320" height="2868" alt="06 盲盒盒柜">
+        </section>
+
+        <section class="frame" id="07-shipping-select">
+          <div class="meta">
+            <span class="step">07</span>
+            <div>
+              <h2>邮寄选择</h2>
+              <p>选择要邮寄的盲盒，并查看选中数量和邮寄费用。</p>
+            </div>
+          </div>
+          <img src="screens/07-shipping-select.png" width="1320" height="2868" alt="07 邮寄选择">
+        </section>
+
+        <section class="frame" id="08-order">
+          <div class="meta">
+            <span class="step">08</span>
+            <div>
+              <h2>确认订单</h2>
+              <p>确认收货地址、商品明细、费用和支付方式。</p>
+            </div>
+          </div>
+          <img src="screens/08-order.png" width="1320" height="2868" alt="08 确认订单">
+        </section>
+
+        <section class="frame" id="09-address">
+          <div class="meta">
+            <span class="step">09</span>
+            <div>
+              <h2>新增地址</h2>
+              <p>进入地址填写页，支持粘贴识别和手动填写。</p>
+            </div>
+          </div>
+          <img src="screens/09-address.png" width="1320" height="2868" alt="09 新增地址">
+        </section>
+
+        <section class="frame" id="10-pay-success">
+          <div class="meta">
+            <span class="step">10</span>
+            <div>
+              <h2>支付成功</h2>
+              <p>支付邮费后生成邮寄订单。</p>
+            </div>
+          </div>
+          <img src="screens/10-pay-success.png" width="1320" height="2868" alt="10 支付成功">
+        </section>
+
+        <section class="frame" id="11-purchase-records">
+          <div class="meta">
+            <span class="step">11</span>
+            <div>
+              <h2>购买记录</h2>
+              <p>查看单抽和五次连抽产生的购买记录。</p>
+            </div>
+          </div>
+          <img src="screens/11-purchase-records.png" width="1320" height="2868" alt="11 购买记录">
+        </section>
+
+        <section class="frame" id="12-shipping-records">
+          <div class="meta">
+            <span class="step">12</span>
+            <div>
+              <h2>邮寄记录</h2>
+              <p>查看已生成的邮寄订单列表。</p>
+            </div>
+          </div>
+          <img src="screens/12-shipping-records.png" width="1320" height="2868" alt="12 邮寄记录">
+        </section>
+
+        <section class="frame" id="13-order-detail">
+          <div class="meta">
+            <span class="step">13</span>
+            <div>
+              <h2>订单详情</h2>
+              <p>查看邮寄状态、地址、明细、费用和订单信息。</p>
+            </div>
+          </div>
+          <img src="screens/13-order-detail.png" width="1320" height="2868" alt="13 订单详情">
+        </section>
+  </div>
+</main>
+</body>
+</html>
