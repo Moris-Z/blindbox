@@ -81,18 +81,9 @@ const screens = [
   {
     id: '01-home',
     title: '主页',
-    desc: '进入活动，查看主图、盲盒列表、概览和底部抽取入口。',
+    desc: '进入活动，查看主图、盲盒列表、介绍说明和底部抽取入口。',
     setup: async page => {
       await reset(page);
-    }
-  },
-  {
-    id: '02-overview',
-    title: '盲盒概览弹窗',
-    desc: '查看总款数、常规款、隐藏款和概率信息。',
-    setup: async page => {
-      await reset(page);
-      await page.evaluate(() => openOverlay('sheet'));
     }
   },
   {
@@ -279,7 +270,7 @@ async function waitReady(page) {
 }
 async function reset(page) {
   const fileUrl = pathToFileURL(path.join(ROOT, 'index.html')).href;
-  await page.goto(`${fileUrl}?flow=${Date.now()}`, { waitUntil: 'load' });
+  await page.goto(`${fileUrl}?flow=${Date.now()}`, { waitUntil: 'domcontentloaded', timeout: 60000 });
   await waitReady(page);
   await page.evaluate(
     ({ key, value }) => {
