@@ -35,21 +35,15 @@ const demoState = {
   purchaseRecords: [
     {
       id: 3002,
-      mode: 'box',
-      amount: 490,
-      items: [
-        { index: 1, qty: 1 },
-        { index: 2, qty: 1 },
-        { index: 5, qty: 1 },
-        { index: 1, qty: 1 },
-        { index: 3, qty: 1 }
-      ],
+      mode: 'draw',
+      amount: 199,
+      items: [{ index: 2, qty: 1 }],
       createdAt: '2026.06.03 15:30:12'
     },
     {
       id: 3001,
       mode: 'draw',
-      amount: 98,
+      amount: 199,
       items: [{ index: 0, qty: 1 }],
       createdAt: '2026.06.03 15:18:06'
     }
@@ -89,7 +83,7 @@ const screens = [
   {
     id: '03-detail',
     title: '盲盒详情弹窗',
-    desc: '点击盲盒卡片后查看款式详情，可进入单抽或五次连抽。',
+    desc: '点击盲盒卡片后查看款式详情，可进入单抽。',
     setup: async page => {
       await reset(page);
       await page.evaluate(() => showItemModal(0));
@@ -98,7 +92,7 @@ const screens = [
   {
     id: '04-single-result',
     title: '单抽结果',
-    desc: '单次抽取后展示获得款式，并提供继续单抽或五次连抽。',
+    desc: '单次抽取后展示获得款式，并提供继续单抽。',
     setup: async page => {
       await reset(page);
       await page.evaluate(() => {
@@ -107,18 +101,6 @@ const screens = [
         $('resultTitle').innerHTML = `恭喜获得<br>${hit.name} · ${hit.type}`;
         $('resultImg').src = hit.img;
         openOverlay('resultModal');
-      });
-    }
-  },
-  {
-    id: '05-five-result',
-    title: '五次连抽结果',
-    desc: '五次连抽后展示 5 张结果卡片，允许重复款。',
-    setup: async page => {
-      await reset(page);
-      await page.evaluate(() => {
-        renderFiveDrawResult([1, 2, 5, 1, 3]);
-        openOverlay('buyModal');
       });
     }
   },
@@ -198,7 +180,7 @@ const screens = [
   {
     id: '11-purchase-records',
     title: '购买记录',
-    desc: '查看单抽和五次连抽产生的购买记录。',
+    desc: '查看单抽产生的购买记录。',
     setup: async page => {
       await reset(page);
       await page.evaluate(() => {
