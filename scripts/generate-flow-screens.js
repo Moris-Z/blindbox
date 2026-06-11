@@ -10,7 +10,7 @@ const sharp = require(require.resolve('sharp', { paths: [DEPS] }));
 const CSS_VIEWPORT = { width: 440, height: 956 };
 const DEVICE_SCALE = 3;
 const OUTPUT_SIZE = { width: 1320, height: 2868 };
-const STATE_KEY = 'nailong_blindbox_state_v6';
+const STATE_KEY = 'soda_blindbox_state_v7';
 const SCREEN_DIR = path.join(ROOT, 'flow', 'screens');
 const INDEX_PATH = path.join(ROOT, 'flow', 'index.html');
 const chromePath = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
@@ -24,9 +24,9 @@ const address = {
 };
 
 const demoState = {
-  inventory: [1, 2, 1, 1, 1, 2],
-  unlocked: [true, true, true, true, true, true],
-  selection: { 1: 1, 5: 1 },
+  inventory: [1, 1, 2],
+  unlocked: [true, true, true],
+  selection: { 0: 1, 2: 1 },
   addresses: [address],
   activeAddressId: address.id,
   editingAddressId: null,
@@ -56,8 +56,8 @@ const demoState = {
       paidAt: '2026.06.03 16:18:10',
       status: '待发货',
       items: [
-        { index: 1, qty: 1 },
-        { index: 5, qty: 1 }
+        { index: 0, qty: 1 },
+        { index: 2, qty: 1 }
       ],
       address,
       packaging: 2,
@@ -123,7 +123,7 @@ const screens = [
     setup: async page => {
       await reset(page);
       await page.evaluate(() => {
-        state.selection = { 1: 1, 5: 1 };
+        state.selection = { 0: 1, 2: 1 };
         renderAll();
         showScreen('shippingScreen');
       });
@@ -136,7 +136,7 @@ const screens = [
     setup: async page => {
       await reset(page);
       await page.evaluate(() => {
-        state.selection = { 1: 1, 5: 1 };
+        state.selection = { 0: 1, 2: 1 };
         renderAll();
         showScreen('orderScreen');
       });
