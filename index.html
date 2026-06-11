@@ -305,7 +305,7 @@ button:active,.blind-card:active,.ship-card:active,.cabinet-card:active,.record-
 <section class="screen app-bg" id="shippingScreen">
   <div class="header"><button class="icon-back" id="shippingBack">‹</button><h1>邮寄盲盒</h1><button class="right-link" id="goRecordsBtn">订单</button></div>
   <div class="inner">
-    <div class="info-card"><h3>费用规则</h3><div>包装费用：1元/盲盒<br>邮寄费用：5个以内邮费9.9元，超出5个附加1元/个</div></div>
+    <div class="info-card"><h3>费用规则</h3><div>包装费用：0.01元/盲盒<br>邮寄费用：包邮</div></div>
     <div class="info-card"><div class="ship-title">选择盲盒 <span id="shippingSelectedCount" style="color:#7b94a4;font-size:15px;font-weight:800;">0/0</span></div><div class="list-grid" id="shippingGrid"></div><div class="empty" id="shippingEmpty" style="display:none;">暂无可邮寄的盲盒，请先单次抽取。</div></div>
   </div>
   <div class="bottom-pill"><button class="primary-pill" id="shippingNextBtn">已选择 0 个盲盒 ¥0.00</button></div>
@@ -398,6 +398,7 @@ const ITEMS = [
 const ITEM_COUNT = ITEMS.length;
 const STORAGE_KEY = 'soda_blindbox_state_v7';
 const DRAW_PRICE = 199;
+const PACKAGING_FEE_CENTS = 1;
 const DEFAULT_STATE = {
   inventory:[0,1,0],
   unlocked:[false,true,false],
@@ -445,8 +446,8 @@ function totalBoxes(){return state.inventory.slice(0,ITEM_COUNT).reduce((a,b)=>a
 function collectedKinds(){return state.unlocked.slice(0,ITEM_COUNT).filter(Boolean).length}
 function selectedQty(){return Object.values(state.selection).reduce((a,b)=>a+Number(b||0),0)}
 function selectionEntries(){return Object.entries(state.selection).filter(([,v])=>v>0).map(([k,v])=>({index:+k,qty:+v,item:ITEMS[+k]}))}
-function packagingFee(n){return n*1}
-function shippingFee(n){if(n<=0) return 0; return 9.9 + Math.max(0,n-5)*1}
+function packagingFee(n){return Math.max(0, Math.round(Number(n)||0))*PACKAGING_FEE_CENTS/100}
+function shippingFee(n){return 0}
 function orderTotal(n){return packagingFee(n)+shippingFee(n)}
 function formatMoney(v){return '¥'+Number(v).toFixed(2)}
 function nowStr(){const d=new Date(); const p=n=>String(n).padStart(2,'0'); return `${d.getFullYear()}.${p(d.getMonth()+1)}.${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`}
@@ -503,7 +504,7 @@ function renderOrder(){
   const methods=[['wx','微信支付',PAY_LOGOS.wx],['zfb','支付宝',PAY_LOGOS.zfb],['dy','抖音支付',PAY_LOGOS.dy]];
   $('payOptions').innerHTML = methods.map(([key,label,logo])=>`<button class="pay-option" data-pay="${key}"><div class="pay-left"><img class="pay-logo" src="${logo}" alt="${label}"><span>${label}</span></div><span class="pay-radio ${state.payment===key?'on':''}"></span></button>`).join('');
   document.querySelectorAll('[data-pay]').forEach(el=>el.onclick=()=>{state.payment=el.dataset.pay; saveState(); renderOrder();});
-  $('payBtn').textContent = !activeAddress() ? '请填写地址' : `支付邮费 ${formatMoney(orderTotal(selectedQty()))}`;
+  $('payBtn').textContent = !activeAddress() ? '请填写地址' : `支付费用 ${formatMoney(orderTotal(selectedQty()))}`;
 }
 function renderAddress(){
   const list = state.addresses || [];

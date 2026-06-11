@@ -60,9 +60,9 @@ const demoState = {
         { index: 2, qty: 1 }
       ],
       address,
-      packaging: 2,
-      freight: 9.9,
-      total: 11.9,
+      packaging: 0.02,
+      freight: 0,
+      total: 0.02,
       payment: 'wx'
     }
   ],
@@ -164,14 +164,14 @@ const screens = [
   {
     id: '10-pay-success',
     title: '支付成功',
-    desc: '支付邮费后生成邮寄订单。',
+    desc: '支付包装费用后生成邮寄订单。',
     setup: async page => {
       await reset(page);
       await page.evaluate(() => {
         $('successOrderNo').textContent = '订单号：20260603161800901';
-        $('sPack').textContent = '¥2.00';
-        $('sFreight').textContent = '¥9.90';
-        $('sTotal').textContent = '¥11.90';
+        $('sPack').textContent = '¥0.02';
+        $('sFreight').textContent = '¥0.00';
+        $('sTotal').textContent = '¥0.02';
         showScreen('orderScreen');
         openOverlay('successModal');
       });
